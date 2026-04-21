@@ -1,104 +1,78 @@
-# Dashboard de Quebra de Funil Operacional — Olist
+# 📊 Quebra de Funil Operacional: Vendas vs. Logística (Case Olist)
 
-> **Vender muito não adianta se a operação trava na ponta.**
+<div align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white">
+  <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white">
+  <img src="https://img.shields.io/badge/Plotly-239120?style=for-the-badge&logo=plotly&logoColor=white">
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white">
+</div>
 
-Dashboard interativo construído com **Python + Streamlit + SQLite** para analisar a "Quebra de Funil" entre a Venda Realizada (esforço do time comercial) e a Entrega/Instalação (gargalo da área técnica/logística), utilizando dados reais do e-commerce brasileiro Olist.
+<br>
+
+> **"Vender muito não adianta se a operação trava na ponta."** > 
+> *A empresa que escala vendas sem escalar operações não está crescendo — está acumulando dívida de experiência com o cliente.*
+
+## 📖 O Problema de Negócios
+
+O crescimento acelerado das vendas no e-commerce frequentemente mascara gargalos operacionais críticos. A desconexão entre o esforço comercial e a capacidade logística gera uma **Quebra de Funil** na última milha, comprometendo a receita, a margem de lucro e a reputação da marca (Risco de Churn).
+
+Este projeto é um laboratório de **Business Intelligence e S&OP (Sales and Operations Planning)**. Utilizando dados reais de quase 100 mil pedidos do e-commerce brasileiro **Olist**, o objetivo foi sair da teoria e provar numericamente o impacto financeiro quando a máquina de vendas acelera, mas a logística não acompanha.
 
 ---
 
-## Estrutura do Projeto
+## 🖥️ Visão Geral do Dashboard
 
-```
+Abaixo, algumas das visões interativas desenvolvidas no painel de Diretoria:
+
+### 1. Visão Executiva: KPIs e Quebra de Funil
+<p align="center">
+  <img src="assets/visao_geral1.jpg" alt="Visão Geral do Dashboard" width="900">
+</p>
+
+### 2. Cascata de Erosão de Receita (Waterfall)
+<p align="center">
+  <img src="assets/cachoeira.jpg" alt="Gráfico Waterfall" width="900">
+</p>
+
+### 3. Análise de Gargalo Regional por UF
+<p align="center">
+  <img src="assets/TX_Problemas.jpg" alt="Análise Regional" width="900">
+</p>
+
+---
+
+## 💡 Principais Insights Estratégicos
+
+A análise profunda da base de dados revelou gargalos críticos na operação:
+
+1. **Erosão Financeira (9,2% da Receita em Risco):** O time comercial gerou **R$ 15,8 milhões** em vendas brutas. No entanto, quase **R$ 1,45 milhão** foram comprometidos na ponta operacional (entregas com atraso severo ou cancelamentos definitivos). Vender sem entregar vira custo logístico.
+2. **Risco em Pedidos High-Ticket:** A Matriz de Dispersão revelou que pedidos de alto valor (High-Ticket) não possuem priorização na esteira de envio, sofrendo um **atraso médio de 9,8 dias**. Isso gera risco direto de evasão (churn) nos clientes mais rentáveis da base.
+3. **Gargalo de Malha Logística:** O comercial vende agressivamente para estados onde a operação não possui capacidade de entrega. Estados como **AL e RJ** apresentaram as maiores taxas de falha (entre 14% e 19% dos pedidos com problemas).
+
+---
+
+## ⚙️ Arquitetura e Tecnologias
+
+O pipeline de dados foi construído com foco em eficiência e governança, rodando inteiramente de forma local sem necessidade de servidores pesados:
+
+- **Linguagem Base:** Python 3.10+
+- **Processamento:** Pandas
+- **Banco de Dados:** SQLite (Em memória, garantindo alta velocidade nos JOINs de tabelas relacionais).
+- **Frontend / UI:** Streamlit (Layout formatado em CSS customizado para *Dark Mode Executivo*).
+- **Visualização de Dados:** Plotly Express & Graph Objects.
+
+### Estrutura do Repositório
+
+```text
 olist_dashboard/
-├── data/                          ← Pasta dos CSVs (você cria)
+├── data/                          ← Pasta onde os CSVs devem ser alocados
 │   ├── olist_orders_dataset.csv
 │   ├── olist_order_items_dataset.csv
-│   └── olist_order_payments_dataset.csv
-├── app.py                         ← Dashboard Streamlit (arquivo principal)
-├── download_data.py               ← Script auxiliar para download dos dados
-├── requirements.txt               ← Dependências Python
-└── README.md                      ← Este arquivo
-```
-
----
-
-## Arquivos CSV Necessários
-
-Você precisa de **3 arquivos** do dataset [Olist Brazilian E-Commerce](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce):
-
-| Arquivo | Descrição | Linhas aprox. |
-|---------|-----------|---------------|
-| `olist_orders_dataset.csv` | Pedidos com datas de compra, aprovação, entrega e status | ~100 mil |
-| `olist_order_items_dataset.csv` | Itens dos pedidos com preço e frete | ~113 mil |
-| `olist_order_payments_dataset.csv` | Pagamentos por pedido | ~104 mil |
-
----
-
-## Passo a Passo para Rodar no seu Notebook (Windows)
-
-### 1. Baixe os dados do Kaggle
-
-Acesse: **https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce**
-
-Clique em **Download**, extraia o ZIP e copie os 3 CSVs listados acima para a pasta `data/` dentro do projeto.
-
-### 2. Instale as dependências
-
-Abra o terminal (CMD ou PowerShell) na pasta do projeto e execute:
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Execute o dashboard
-
-```bash
-streamlit run app.py
-```
-
-O dashboard abrirá automaticamente no navegador em **http://localhost:8501**.
-
----
-
-## Resumo em 4 Comandos (copie e cole)
-
-```bash
-cd olist_dashboard
-pip install -r requirements.txt
-# (coloque os CSVs na pasta data/)
-streamlit run app.py
-```
-
----
-
-## O que o Dashboard Mostra
-
-O pipeline completo roda dentro do `app.py`:
-
-1. **Importação** dos CSVs com Pandas
-2. **Limpeza** de datas e valores nulos
-3. **Carga em SQLite** em memória (banco relacional)
-4. **Query SQL** com JOINs que classifica cada pedido em 3 buckets:
-   - **Entregue no Prazo** — operação de sucesso
-   - **Entregue com Atraso** — operação com atrito
-   - **Cancelado / Indisponível** — quebra total do funil
-5. **Dashboard** com:
-   - 4 KPIs executivos (Receita Total, Receita no Prazo, Receita Comprometida, Receita Perdida)
-   - Gráfico de Funil (Pedidos Realizados → Entregues → Atrasados → Cancelados)
-   - Gráfico de Barras (Receita por Status Operacional)
-   - Gráfico Donut (Distribuição percentual)
-   - Tabela Resumo Executiva
-
----
-
-## Tecnologias Utilizadas
-
-- **Python 3.10+**
-- **Pandas** — manipulação de dados
-- **SQLite3** — banco relacional em memória (built-in do Python)
-- **Streamlit** — framework de dashboard
-- **Plotly** — gráficos interativos
-
----
-
-*Desenvolvido como laboratório de análise de dados para demonstrar habilidades de cruzamento de dados (JOINs), SQL e visualização de Business Intelligence.*
+│   ├── olist_order_payments_dataset.csv
+│   └── olist_customers_dataset.csv
+├── assets/                        ← Imagens utilizadas neste README
+├── app.py                         ← Código principal do Dashboard Streamlit
+├── download_data.py               ← Script auxiliar para automação de download via API
+├── requirements.txt               ← Dependências do projeto
+└── README.md                      ← Este arquivo de documentação
