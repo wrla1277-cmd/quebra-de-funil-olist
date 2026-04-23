@@ -1,4 +1,4 @@
-# 📊 Quebra de Funil Operacional: Vendas vs. Logística (Case Olist)
+# Quebra de Funil Operacional: Vendas vs. Logística (Case Olist)
 
 <div align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
@@ -13,7 +13,7 @@
 > **"Vender muito não adianta se a operação trava na ponta."** > 
 > *A empresa que escala vendas sem escalar operações não está crescendo — está acumulando dívida de experiência com o cliente.*
 
-## 📖 O Problema de Negócios
+## O Problema de Negócios
 
 O crescimento acelerado das vendas no e-commerce frequentemente mascara gargalos operacionais críticos. A desconexão entre o esforço comercial e a capacidade logística gera uma **Quebra de Funil** na última milha, comprometendo a receita, a margem de lucro e a reputação da marca (Risco de Churn).
 
@@ -21,7 +21,7 @@ Este projeto é um laboratório de **Business Intelligence e S&OP (Sales and Ope
 
 ---
 
-## 🖥️ Visão Geral do Dashboard
+## Visão Geral do Dashboard
 
 Abaixo, algumas das visões interativas desenvolvidas no painel de Diretoria:
 
@@ -42,7 +42,7 @@ Abaixo, algumas das visões interativas desenvolvidas no painel de Diretoria:
 
 ---
 
-## 💡 Principais Insights Estratégicos
+## Principais Insights Estratégicos
 
 A análise profunda da base de dados revelou gargalos críticos na operação:
 
@@ -52,7 +52,7 @@ A análise profunda da base de dados revelou gargalos críticos na operação:
 
 ---
 
-## ⚙️ Arquitetura e Tecnologias
+## Arquitetura e Tecnologias
 
 O pipeline de dados foi construído com foco em eficiência e governança, rodando inteiramente de forma local sem necessidade de servidores pesados:
 
