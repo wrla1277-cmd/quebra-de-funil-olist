@@ -15,7 +15,7 @@ import sqlite3
 import plotly.express as px
 import plotly.graph_objects as go
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CONFIGURAÇÃO DA PÁGINA
@@ -51,7 +51,7 @@ st.markdown(
     }
     div[data-testid="stMetric"] label {
         color: #8b949e;
-        font-size: 1.1rem; /* Aumentado */
+        font-size: 1.25rem; /* Aumentado */
     }
     div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
         color: #fafafa;
@@ -367,8 +367,8 @@ def main():
         st.markdown("---")
 
         st.markdown("### 📅 Período de Análise")
-        min_date = df_detail["order_purchase_timestamp"].min().date()
-        max_date = df_detail["order_purchase_timestamp"].max().date()
+        min_date = date(2017, 1, 1)
+        max_date = date(2018, 7, 31)
 
         col_d1, col_d2 = st.columns(2)
         with col_d1:
@@ -477,10 +477,10 @@ def main():
         st.metric("✅ Receita Entregue no Prazo", format_brl(rec_prazo), delta=f"{pct_prazo:.1f}% do total")
     with col3:
         pct_comp = (receita_comprometida / receita_total * 100) if receita_total > 0 else 0
-        st.metric("⚠️ Receita Comprometida", format_brl(receita_comprometida), delta=f"-{pct_comp:.1f}% do total", delta_color="inverse", help="Atrasos + Cancelamentos")
+        st.metric("⚠️ Receita Comprometida", format_brl(receita_comprometida), delta=f"-{pct_comp:.1f}% do total", delta_color="normal", help="Atrasos + Cancelamentos")
     with col4:
         pct_cancel = (rec_cancel / receita_total * 100) if receita_total > 0 else 0
-        st.metric("🚫 Receita Perdida (Cancelados)", format_brl(rec_cancel), delta=f"-{pct_cancel:.1f}% do total", delta_color="inverse")
+        st.metric("🚫 Receita Perdida (Cancelados)", format_brl(rec_cancel), delta=f"-{pct_cancel:.1f}% do total", delta_color="normal")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -498,14 +498,14 @@ def main():
                 textinfo="value+percent initial",
                 marker=dict(color=funnel_colors),
                 connector=dict(line=dict(color="#30363d", width=2)),
-                textfont=dict(size=16) # Fonte do texto no gráfico
+                textfont=dict(size=18) # Fonte do texto no gráfico
             )
         )
         fig_funnel.update_layout(
             template=PLOTLY_TEMPLATE, height=450,
             margin=dict(l=10, r=10, t=10, b=10), 
-            font=dict(size=16), # Fonte dos rótulos dos eixos
-            hoverlabel=dict(font_size=16) # Tamanho da fonte do mouse hover
+            font=dict(size=18), # Fonte dos rótulos dos eixos
+            hoverlabel=dict(font_size=18) # Tamanho da fonte do mouse hover
         )
         st.plotly_chart(fig_funnel, use_container_width=True)
 
@@ -521,11 +521,11 @@ def main():
         fig_bar.update_layout(
             template=PLOTLY_TEMPLATE, height=450, showlegend=False,
             margin=dict(l=10, r=10, t=10, b=10), 
-            font=dict(size=16), # Fonte dos rótulos
+            font=dict(size=20), # Fonte dos rótulos
             yaxis_tickprefix="R$ ",
-            hoverlabel=dict(font_size=16) # Tamanho da fonte do mouse hover
+            hoverlabel=dict(font_size=20) # Tamanho da fonte do mouse hover
         )
-        fig_bar.update_traces(textposition="outside", textfont=dict(size=16))
+        fig_bar.update_traces(textposition="outside", textfont=dict(size=22))
         st.plotly_chart(fig_bar, use_container_width=True)
 
     st.markdown("<hr style='border-color: #30363d;'>", unsafe_allow_html=True)
@@ -540,14 +540,14 @@ def main():
                 hole=0.55,
                 marker=dict(colors=[COLOR_MAP.get(b, "#636e72") for b in df_summary_f["bucket"]]),
                 textinfo="label+percent", textposition="outside",
-                textfont=dict(size=16)
+                textfont=dict(size=20)
             )
         )
         fig_donut.update_layout(
             template=PLOTLY_TEMPLATE, height=450,
             margin=dict(l=10, r=10, t=10, b=10), showlegend=False, 
-            font=dict(size=16),
-            hoverlabel=dict(font_size=16) # Tamanho da fonte do mouse hover
+            font=dict(size=20),
+            hoverlabel=dict(font_size=20) # Tamanho da fonte do mouse hover
         )
         st.plotly_chart(fig_donut, use_container_width=True)
 
@@ -572,7 +572,7 @@ def main():
             <div style='background-color: #1c1f26; padding: 20px; border-radius: 10px;
                         border-left: 6px solid #f39c12; margin-top: 15px;'>
                 <strong style='color: #f39c12; font-size: 1.2rem;'>💡 Insight Principal:</strong><br><br>
-                <span style='color: #c9d1d9; font-size: 1.1rem;'>
+                <span style='color: #c9d1d9; font-size: 1.2rem;'>
                 O time comercial gerou <strong>{format_brl(receita_total)}</strong> em vendas,
                 porém <strong>{format_brl(receita_comprometida)}</strong>
                 ({pct_comp:.1f}%) foram comprometidos por falhas logísticas.<br><br>
@@ -609,7 +609,7 @@ def main():
     st.markdown("<a id='matriz-impacto'></a>", unsafe_allow_html=True)
     st.markdown("<h3 style='font-size: 1.6rem;'>🎯 Matriz de Impacto Financeiro — Scatter Plot de Risco</h3>", unsafe_allow_html=True)
     st.markdown(
-        "<p style='color: #8b949e; font-size: 1.1rem;'>"
+        "<p style='color: #8b949e; font-size: 1.25rem;'>"
         "Cada ponto é um pedido. O eixo X mostra os dias de atraso e o eixo Y o valor do pedido. "
         "Pedidos no quadrante superior-direito são <strong style='color: #e74c3c;'>alto valor + alto atraso</strong> "
         "— o pior cenário para retenção de clientes.</p>",
@@ -648,7 +648,7 @@ def main():
             yaxis_title="Valor do Pedido (R$)",
             yaxis_tickprefix="R$ ",
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=14)),
-            hoverlabel=dict(font_size=16) # Aumentado tooltip
+            hoverlabel=dict(font_size=18) # Aumentado tooltip
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
 
@@ -699,9 +699,9 @@ def main():
     fig_waterfall.update_layout(
         template=PLOTLY_TEMPLATE, height=550,
         margin=dict(l=10, r=10, t=30, b=10),
-        font=dict(size=14), # Fonte dos rótulos aumentada
+        font=dict(size=18), # Fonte dos rótulos aumentada
         yaxis_tickprefix="R$ ", yaxis_title="Receita (R$)", showlegend=False,
-        hoverlabel=dict(font_size=16) # Hover text aumentado
+        hoverlabel=dict(font_size=18) # Hover text aumentado
     )
     st.plotly_chart(fig_waterfall, use_container_width=True)
 
@@ -709,7 +709,7 @@ def main():
     with col_w1:
         erosao_total = rec_cancel + rec_atraso
         pct_erosao = (erosao_total / receita_total * 100) if receita_total > 0 else 0
-        st.metric("Erosão Total", format_brl(erosao_total), delta=f"-{pct_erosao:.1f}%", delta_color="inverse")
+        st.metric("Erosão Total", format_brl(erosao_total), delta=f"-{pct_erosao:.1f}%", delta_color="normal")
     with col_w2: st.metric("Perda Definitiva (Cancelados)", format_brl(rec_cancel))
     with col_w3: st.metric("Receita Líquida Saudável", format_brl(receita_saudavel), delta=f"{(receita_saudavel / receita_total * 100):.1f}% aproveitado" if receita_total > 0 else "0%")
 
@@ -743,7 +743,7 @@ def main():
             fig_regional.add_trace(go.Bar(
                 y=df_top_uf["uf"], x=df_top_uf["pct_cancelado"], name="% Cancelado", orientation="h",
                 marker_color="#e74c3c", text=df_top_uf["pct_cancelado"].apply(lambda x: f"{x:.1f}%"), textposition="inside",
-                textfont=dict(size=14)
+                textfont=dict(size=18)
             ))
 
             fig_regional.update_layout(
@@ -769,7 +769,7 @@ def main():
                 margin=dict(l=10, r=10, t=30, b=10), font=dict(size=14),
                 title=dict(text="Volume × Taxa de Problemas por UF", font=dict(size=16)),
                 coloraxis_colorbar=dict(title="% Prob.", tickfont=dict(size=14)),
-                hoverlabel=dict(font_size=16) # Tooltip
+                hoverlabel=dict(font_size=18) # Tooltip
             )
             st.plotly_chart(fig_uf_scatter, use_container_width=True)
 
@@ -790,7 +790,7 @@ def main():
     st.markdown("<a id='timeline'></a>", unsafe_allow_html=True)
     st.markdown("<h3 style='font-size: 1.6rem;'>📈 Linha do Tempo Operacional — Evolução Mensal</h3>", unsafe_allow_html=True)
     st.markdown(
-        "<p style='color: #8b949e; font-size: 1.1rem;'>"
+        "<p style='color: #8b949e; font-size: 1.25rem;'>"
         "Como a performance operacional evoluiu ao longo do tempo? "
         "A taxa de problemas está <strong style='color: #2ecc71;'>melhorando</strong> ou "
         "<strong style='color: #e74c3c;'>piorando</strong>?</p>",
@@ -811,11 +811,11 @@ def main():
     )
     fig_timeline.update_layout(
         template=PLOTLY_TEMPLATE, height=500,
-        margin=dict(l=10, r=10, t=30, b=10), font=dict(size=14),
+        margin=dict(l=10, r=10, t=30, b=10), font=dict(size=18),
         xaxis_title="", yaxis_title="% dos Pedidos",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=14)),
-        title=dict(text="Evolução Mensal — Composição dos Status (%)", font=dict(size=16)),
-        hoverlabel=dict(font_size=16) # Tooltip
+        title=dict(text="Evolução Mensal — Composição dos Status (%)", font=dict(size=18)),
+        hoverlabel=dict(font_size=18) # Tooltip
     )
     st.plotly_chart(fig_timeline, use_container_width=True)
 
